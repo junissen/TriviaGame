@@ -1,0 +1,75 @@
+	
+body {
+	background-image: url('../images/notebook.png');
+}
+
+.title,
+.timer,
+.correctAnswers,
+.incorrectAnswers {
+	font-family: 'Fredericka the Great', cursive;
+	text-align: center;
+}
+
+.answerScreen,
+.finalOptions {
+	text-align: center;
+	font-family: 'Amatic SC', cursive;
+}
+
+.question,
+.options {
+	font-family: 'Amatic SC', cursive;
+}
+
+.question {
+	font-size: 35px;
+	/*font-style: italic;*/
+	font-weight: bold;
+}
+
+.options {
+	font-size: 24px;
+}
+
+.title {
+	margin-top: 10px;
+	text-align: center;
+	font-size: 50px;
+}
+
+.answerScreen {
+	font-size: 35px;
+}
+
+.timer {
+	font-size: 30px;
+}
+
+.gameArea {
+	border: solid 2px #696969;
+	padding: 20px;
+}
+
+#correctAnswer,
+#incorrectAnswer {
+	text-decoration: underline;
+	font-size: 24px;
+}
+
+#correctAnswerScore,
+#incorrectAnswerScore {
+	font-size: 30px;
+}
+
+.finalOptions {
+	margin: 20px;
+	font-size: 20px;
+}
+
+#confirmButton,
+#nonconfirmButton {
+	margin: 20px;
+}
+
+
