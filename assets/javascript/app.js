@@ -94,145 +94,166 @@ $(document).ready(function(){
 			question: "Which was not a Horcrux?",
 			options: ["Nagini", "Rowena Ravenclaw's Diadem", "The Mirror of Erasid", "Harry Potter"],
 			answer: "The Mirror of Erasid"
-		}],
-		
-
-		triviaQuestion: function() {  
-			// Empty answer screen that shows after each trivia questions
-			$('.answerScreen').empty();
-
-			// Commands if you have run out of trivia questions
-			if (variables.index === (variables.triviaQuestions.length)) {
-
-				$('.question').empty();
-				$('.computerOptions').remove();
-				$('.correctAnswers').empty();
-				$('.incorrectAnswers').empty();
-				$('.answerScreen').html("Final score:");
-				var correctDisplay = $('<div>');
-				correctDisplay.html(variables.correctAnswers + ' total correct answers');
-				var incorrectDisplay = $('<div>');
-				incorrectDisplay.html(variables.incorrectAnswers + ' total incorrect answers');
-				$('.answerScreen').append(correctDisplay);
-				$('.answerScreen').append(incorrectDisplay);
-
-				$('.finalOptions').text("Would you like to play again?");
-				
-				var confirmButton = $('<button>');
-				confirmButton.attr('id', 'confirmButton')
-				confirmButton.attr('value', 'yes');
-				confirmButton.text("Yes");
-				confirmButton.css('display', 'inline-block');
-				$('.finalOptions').append(confirmButton);
-
-				var nonconfirmButton = $('<button>');
-				nonconfirmButton.attr('id', 'nonconfirmButton')
-				nonconfirmButton.attr('value', 'no');
-				nonconfirmButton.text("No");
-				nonconfirmButton.css('display', 'inline-block');
-				$('.finalOptions').append(nonconfirmButton);
-
-				$(document).on("click", "button", function() {
-					var reply = this.getAttribute('value');
-
-					if (reply === 'yes') {
-					variables.correctAnswers = 0;
-					variables.incorrectAnswers = 0;
-					variables.index = 0;
-					variables.computerAnswer = '';
-					$('.answerScreen').empty();
-					$('.finalOptions').empty();
-					variables.triviaQuestion()
-					}
-
-					else if (reply === 'no') {
-					window.close()
-					}
-				})
-
-			}
-
-			else {
-
-				if (!clockRunning) {
-					$('.timer').html(variables.time + ' seconds left')
-					intervalId = setInterval(variables.count, 1000);
-					clockRunning = true;
-				}
-
-				// sets function variables updates computerAnswer
-				var computerQuestion =  variables.triviaQuestions[variables.index].question;
-				var computerOptions = variables.triviaQuestions[variables.index].options;
-				variables.computerAnswer = variables.triviaQuestions[variables.index].answer;
-
-				// Displays trivia question
-				$(".question").html(computerQuestion)
-
-				// Displays radio buttons for each question option
-				for (var i = 0; i < computerOptions.length; i ++) {
-					var newDiv = $('<div>');
-					newDiv.addClass('computerOptions');
-					var newLabel = $('<label>');
-					newLabel.html(" " + computerOptions[i]);
-					var newOption = $('<input type = "radio" name = "userChoice">');
-					newOption.attr('value', computerOptions[i]);
-					newLabel.prepend(newOption);
-					newDiv.append(newLabel);
-					$('.options').append(newDiv);
-				}
-
-				// Displays number of correct and incorrect answer user currently has
-				var correctAnswer = $('<div>');
-				correctAnswer.html("Correct Answers");
-				correctAnswer.attr('id', 'correctAnswer');
-				var correctAnswerScore = $('<div>');
-				correctAnswerScore.html(variables.correctAnswers);
-				correctAnswerScore.attr('id', 'correctAnswerScore');
-				$('.correctAnswers').append(correctAnswer);
-				$('.correctAnswers').append(correctAnswerScore);
-
-				var incorrectAnswer = $('<div>');
-				incorrectAnswer.html("Incorrect Answers");
-				incorrectAnswer.attr('id', 'incorrectAnswer');
-				var incorrectAnswerScore = $('<div>');
-				incorrectAnswerScore.html(variables.incorrectAnswers);
-				incorrectAnswerScore.attr('id', 'incorrectAnswerScore');
-				$('.incorrectAnswers').append(incorrectAnswer);
-				$('.incorrectAnswers').append(incorrectAnswerScore);
-
-			}
-		},
-
-		count: function() {
-			// Function for starting timer at the start of each question
-			variables.time = variables.time - 1;
-			$('.timer').html(variables.time + ' seconds left');
-
-			if (variables.time === 0) {
-				clearInterval(intervalId);
-				clockRunning = false;
-
-				$('.computerOptions').remove();
-				$('.question').empty();
-				$('.correctAnswers').empty();
-				$('.incorrectAnswers').empty();
-				$('.timer').empty();
-			
-				// Present new page
-				$('.answerScreen').html("Time's Up! The correct answer was <strong> '" + variables.computerAnswer + "'</strong>.")
-
-				// Rerun trivia question
-				variables.incorrectAnswers++;
-				variables.index++;
-				variables.time = 10;
-				setTimeout(variables.triviaQuestion, 2000);
-
-			}
-		}
+		}]
 	};
 
+	function randomizeTrivia(array) {
+		var ctr = array.length, temp, index;
+		while (ctr > 0) {
+			index = Math.floor(Math.random() * ctr);
+			ctr --;
+			temp = array[ctr];
+			array[ctr] = array[index];
+			array[index] = temp;
+		}
+		return array
+	}
+
+	function triviaQuestion() {
+		// Empty answer screen that shows after each trivia questions
+		$('.answerScreen').empty();
+	
+		// Commands if you have run out of trivia questions
+		if (variables.index === (variables.triviaQuestions.length)) {
+
+			$('.question').empty();
+			$('.computerOptions').remove();
+			$('.correctAnswers').empty();
+			$('.incorrectAnswers').empty();
+			$('.answerScreen').html("Final score:");
+			var correctDisplay = $('<div>');
+			correctDisplay.html(variables.correctAnswers + ' total correct answers');
+			var incorrectDisplay = $('<div>');
+			incorrectDisplay.html(variables.incorrectAnswers + ' total incorrect answers');
+			$('.answerScreen').append(correctDisplay);
+			$('.answerScreen').append(incorrectDisplay);
+
+			$('.finalOptions').text("Would you like to play again?");
+			
+			var confirmButton = $('<button>');
+			confirmButton.attr('id', 'confirmButton')
+			confirmButton.attr('value', 'yes');
+			confirmButton.text("Yes");
+			confirmButton.css('display', 'inline-block');
+			$('.finalOptions').append(confirmButton);
+
+			var nonconfirmButton = $('<button>');
+			nonconfirmButton.attr('id', 'nonconfirmButton')
+			nonconfirmButton.attr('value', 'no');
+			nonconfirmButton.text("No");
+			nonconfirmButton.css('display', 'inline-block');
+			$('.finalOptions').append(nonconfirmButton);
+
+			$(document).on("click", "button", function() {
+				var reply = this.getAttribute('value');
+
+				if (reply === 'yes') {
+				console.log('yes')
+				variables.correctAnswers = 0;
+				variables.incorrectAnswers = 0;
+				variables.index = 0;
+				variables.computerAnswer = '';
+				$('.answerScreen').empty();
+				$('.finalOptions').empty();
+				$('.question').empty();
+				$('.computerOptions').remove();
+				$('.correctAnswers').empty();
+				$('.incorrectAnswers').empty();
+				startGame();
+				}
+
+				else if (reply === 'no') {
+				window.close()
+				}
+			})
+
+		}
+
+		else {
+
+			if (!clockRunning) {
+				$('.timer').html(variables.time + ' seconds left')
+				intervalId = setInterval(count_test, 1000);
+				clockRunning = true;
+			}
+
+			// sets function variables updates computerAnswer
+			var computerQuestion =  variables.triviaQuestions[variables.index].question;
+			var computerOptions = variables.triviaQuestions[variables.index].options;
+			variables.computerAnswer = variables.triviaQuestions[variables.index].answer;
+
+			// Displays trivia question
+			$(".question").html(computerQuestion)
+
+			// Displays radio buttons for each question option
+			for (var i = 0; i < computerOptions.length; i ++) {
+				var newDiv = $('<div>');
+				newDiv.addClass('computerOptions');
+				var newLabel = $('<label>');
+				newLabel.html(" " + computerOptions[i]);
+				var newOption = $('<input type = "radio" name = "userChoice">');
+				newOption.attr('value', computerOptions[i]);
+				newLabel.prepend(newOption);
+				newDiv.append(newLabel);
+				$('.options').append(newDiv);
+			}
+
+			// Displays number of correct and incorrect answer user currently has
+			var correctAnswer = $('<div>');
+			correctAnswer.html("Correct Answers");
+			correctAnswer.attr('id', 'correctAnswer');
+			var correctAnswerScore = $('<div>');
+			correctAnswerScore.html(variables.correctAnswers);
+			correctAnswerScore.attr('id', 'correctAnswerScore');
+			$('.correctAnswers').append(correctAnswer);
+			$('.correctAnswers').append(correctAnswerScore);
+
+			var incorrectAnswer = $('<div>');
+			incorrectAnswer.html("Incorrect Answers");
+			incorrectAnswer.attr('id', 'incorrectAnswer');
+			var incorrectAnswerScore = $('<div>');
+			incorrectAnswerScore.html(variables.incorrectAnswers);
+			incorrectAnswerScore.attr('id', 'incorrectAnswerScore');
+			$('.incorrectAnswers').append(incorrectAnswer);
+			$('.incorrectAnswers').append(incorrectAnswerScore);
+
+		}
+	}
+
+	function count_test() {
+		// Function for starting timer at the start of each question
+		variables.time = variables.time - 1;
+		$('.timer').html(variables.time + ' seconds left');
+
+		if (variables.time === 0) {
+			clearInterval(intervalId);
+			clockRunning = false;
+
+			$('.computerOptions').remove();
+			$('.question').empty();
+			$('.correctAnswers').empty();
+			$('.incorrectAnswers').empty();
+			$('.timer').empty();
+
+			// Present new page
+			$('.answerScreen').html("Time's Up! The correct answer was <strong> '" + variables.computerAnswer + "'</strong>.")
+
+			// Rerun trivia question
+			this.incorrectAnswers++;
+			this.index++;
+			variables.time = 10;
+			setTimeout(triviaQuestion, 2000);
+		}
+	}
+
+	function startGame() {
+		var randomized_array = randomizeTrivia(variables.triviaQuestions)
+		variables.triviaQuestions = randomized_array;
+		triviaQuestion();
+	}
+
 	// Function call for initial screen
-	variables.triviaQuestion();
+	startGame();
 
 	// Function for if a radio button option is clicked
 	$(document).on("click", "input", function() {
@@ -256,7 +277,7 @@ $(document).ready(function(){
 			variables.correctAnswers++;
 			variables.index++;
 			variables.time = 10;
-			setTimeout(variables.triviaQuestion, 2000);
+			setTimeout(triviaQuestion, 2000);
 		}
 
 		// option if user guesses an incorrect answer
@@ -277,7 +298,7 @@ $(document).ready(function(){
 			variables.incorrectAnswers++;
 			variables.index++;
 			variables.time = 10;
-			setTimeout(variables.triviaQuestion, 2000);
+			setTimeout(triviaQuestion, 2000);
 		}
 	});
 
